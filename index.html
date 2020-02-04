@@ -6,10 +6,16 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <title>Js tools</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
-        <letters-counter>
+        <letters-counter></letters-counter>
+        <json-parser></json-parser>
     </div>
     <script>
         Vue.component('letters-counter', {
@@ -19,15 +25,49 @@
                 }
             },
             computed: {
-                result: function() {
+                letters: function() {
                     return this.word.length;
+                },
+                words: function() {
+                    let result = this.word;
+                    result = result.replace(/(^\s)|(\s*$)/gi, '');
+                    result = result.replace(/[ ]{2,}/gi, ' ');
+                    result = result.replace(/\n /, '\n');
+                    return result.split(' ').length;
                 }
             },
             template: `<div>
-                <p>Подсчет букв</p>
+                <h2>Letter counter</h2>
                 <textarea v-model="word"></textarea>
-                <p>{{result}}</p>
+                <p>{{letters}} letters</p>
+                <p>{{words}} words</p>
             </div>`
+        })
+        Vue.component('json-parser', {
+            data: function() {
+                return {
+                    rawJson: ''
+                }
+            },
+            computed: {
+                result: function() {
+                    if (!this.rawJson) {
+                        return '';
+                        
+                    }
+                    let json = JSON.parse(this.rawJson);
+                return JSON.stringify(json, null, '\t');
+                }
+            },
+            template: `
+            <div>
+                <h2>Json parser</h2>
+                <textarea v-model="rawJson"></textarea>
+                <p>
+                    <pre>{{result}}</pre>
+                </p>
+            </div>
+            `
         })
         var App = new Vue({
             el: '#app',
