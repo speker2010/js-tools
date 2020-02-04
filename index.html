@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>Js tools</title>
+</head>
+<body>
+    <div id="app">
+        <letters-counter>
+    </div>
+    <script>
+        Vue.component('letters-counter', {
+            data: function() {
+                return {
+                    word: ''
+                }
+            },
+            computed: {
+                result: function() {
+                    return this.word.length;
+                }
+            },
+            template: `<div>
+                <p>Подсчет букв</p>
+                <input v-model="word">
+                <p>{{result}}</p>
+            </div>`
+        })
+        var App = new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello'
+            }
+        });
+    </script>
+</body>
+</html>
