@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/punycode/1.4.1/punycode.min.js" integrity="sha256-I5XOWZu6gbewMSB9UR88y0GmiJi9AsQcCzUpA/MBNnA=" crossorigin="anonymous"></script>
     <title>Js tools</title>
     <style>
         body {
@@ -16,6 +17,7 @@
     <div id="app">
         <letters-counter></letters-counter>
         <json-parser></json-parser>
+        <punycode-converter></punycode-converter>
     </div>
     <script>
         Vue.component('letters-counter', {
@@ -67,6 +69,35 @@
                     <pre>{{result}}</pre>
                 </p>
             </div>
+            `
+        })
+        Vue.component('punycode-converter', {
+            data: function() {
+                return {
+                    punycode: '',
+                    utf: ''
+                }
+            },
+            computed: {
+                resultPunycode: function() {
+                    return window.punycode.toASCII(this.utf);
+                },
+                resultASCII: function() {
+                    return window.punycode.toUnicode(this.punycode);
+                }
+            },
+            template: `
+                <div>
+                    <h2>Punycode converter</h2>
+                    <h3>utf -> punycode</h3>
+                    <input v-model="utf">
+                    <div>result:</div>
+                    <p>{{resultPunycode}}</p>
+                    <h3>punycode -> ascii </h3>
+                    <input v-model="punycode">
+                    <div>result:</div>
+                    <p>{{resultASCII}}</p>
+                </div>
             `
         })
         var App = new Vue({
