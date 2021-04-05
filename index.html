@@ -11,6 +11,10 @@
         body {
             font-family: sans-serif;
         }
+        .week-list {
+            display: flex;
+            flex-wrap: wrap;
+        }
     </style>
 </head>
 <body>
@@ -18,8 +22,61 @@
         <letters-counter></letters-counter>
         <json-parser></json-parser>
         <punycode-converter></punycode-converter>
+        <live-weeks></live-weeks>
     </div>
     <script>
+        Vue.component('live-weeks', {
+            data: function() {
+                return {
+                    birthDay: null,
+                    needShow: false
+                }
+            },
+            methods: {
+                show: function() {
+                    if (this.needShow === true) {
+                        this.birthDay = null;
+                        this.needShow = false;
+                    } else {
+                        this.needShow = true;
+                    }
+                }
+            },
+            computed: {
+                weeks: function() {
+                    let birthDay = this.birthDay;
+                    if (birthDay === null || this.needShow === false) {
+                        return [];
+                    }
+                    let dateInstance = new Date(birthDay);
+                    let curDateInstance = new Date();
+                    let newDateInstance = new Date(birthDay);
+                    let result = [];
+                    while (newDateInstance.getFullYear() - dateInstance.getFullYear() < 65) {
+                        console.log(newDateInstance.getFullYear() - dateInstance.getFullYear(), newDateInstance.getFullYear(), newDateInstance.getMonth(), newDateInstance.getDay());
+                        newDateInstance.setDate(newDateInstance.getDate() + 7);
+                        if (curDateInstance < newDateInstance) {
+                            result.push(0);
+                        } else {
+                            result.push(1);
+                        }
+                    }
+                    return result;
+                }
+            },
+            template: `
+                <div>
+                    <h2>Remain weeks</h2>
+                    <input type=date v-model=birthDay :disabled="needShow" />
+                    <button @click="show" v-if="!needShow">show</button>
+                    <button @click="show" v-else>clear</button>
+                    
+                    <div class="week-list">
+                        <div v-for="week in weeks">{{week}}</div>
+                    </div>
+                </div>
+            `
+        });
         Vue.component('letters-counter', {
             data: function() {
                 return {
